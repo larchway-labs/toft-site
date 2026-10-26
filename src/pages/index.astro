@@ -1,0 +1,410 @@
+---
+/**
+ * Toft's home page.
+ *
+ * The copy and the design are taken from the product's own landing page
+ * (`web/src/pages/landing.tsx` in the platform repo) so a visitor moving from
+ * here to the playground sees one product. The rule carries over too: every
+ * claim here has to hold up against the platform's `docs/invariants.md`, and a
+ * framework is named only where the build detector names it.
+ *
+ * What this page adds is the way in for someone outside an organization: the
+ * playground, and the install.
+ */
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "../styles/site.css";
+import Icon from "../components/Icon.astro";
+
+const PLAYGROUND = "https://trytoft.dev";
+const DOCS = "https://larchway-labs.github.io/toft-docs/latest/";
+const INSTALL_OPTIONS = `${DOCS}admin/start/install-options/`;
+const FIRST_APP = `${DOCS}user/start/first-app/`;
+const CLI_REPO = "https://github.com/larchway-labs/toft-cli";
+const INSTALL_REPO = "https://github.com/larchway-labs/toft-install";
+const SDK_REPO = "https://github.com/larchway-labs/toft-sdk";
+const GALLERY_REPO = "https://github.com/larchway-labs/toft-gallery";
+
+const INSTALL_CMD =
+  "curl -fsSL https://raw.githubusercontent.com/larchway-labs/toft-install/main/install.sh | sh";
+const CLI_CMD =
+  "curl -fsSL https://raw.githubusercontent.com/larchway-labs/toft-cli/main/install.sh | sh";
+
+const languages = [
+  { language: "Python", named: ["Flask", "FastAPI", "Streamlit"], generic: "Any other Python app", sdk: true },
+  { language: "Node", named: ["Next.js"], generic: "Any other Node app", sdk: true },
+  { language: "Go", named: [], generic: "Any Go service", sdk: true },
+  { language: "R", named: ["Shiny", "Plumber", "R Markdown", "Quarto"], generic: "Other R projects aren’t built", sdk: true },
+  { language: "Notebooks", named: ["marimo"], generic: "Jupyter and Quarto documents, re-run when you deploy", sdk: false },
+  { language: "Static", named: [], generic: "A folder of HTML, served as it is", sdk: false },
+];
+const builtOutput = ["Vite", "Astro", "SvelteKit", "Hugo", "Eleventy", "Create React App"];
+
+const capabilities = [
+  {
+    icon: "git-branch",
+    title: "Git push to deploy",
+    body: "Connect a repository and a branch, and every push ships. The new version goes live with no downtime, and a failed build leaves the old one serving.",
+  },
+  {
+    icon: "calendar-clock",
+    title: "Scheduled and background jobs",
+    body: "Run a report every night, or start long work from inside an app. Each run is logged.",
+  },
+  {
+    icon: "hard-drive",
+    title: "Storage",
+    body: "An administrator attaches a file share or an S3 bucket. The app sees a folder and never handles the credentials.",
+  },
+  {
+    icon: "terminal",
+    title: "A CLI and SDKs",
+    body: "Deploy from a terminal, uncommitted changes included. SDKs for Python, Node, Go and R cover jobs, storage and messages.",
+  },
+];
+
+const integrations = [
+  { label: "Messages", names: ["Slack", "Microsoft Teams", "Microsoft Teams (bot)", "Google Chat", "Discord", "Email"] },
+  { label: "Files", names: ["SharePoint", "OneDrive", "Google Drive"] },
+  { label: "Alerts and webhooks", names: ["PagerDuty", "Signed webhook"] },
+];
+
+const deployShapes = [
+  {
+    label: "Runs on",
+    body: "Any container runtime: Docker Compose on a single server, Kubernetes through a Helm chart, Amazon ECS and EKS, and Azure AKS. On Kubernetes an app can run in its own pod, with network policy around it.",
+  },
+  { label: "App storage", body: "EFS, Azure Files or any S3-compatible bucket." },
+  {
+    label: "Sign-in",
+    body: "Any OpenID Connect provider, including Okta, Microsoft Entra ID, Auth0, Keycloak, Ping and OneLogin.",
+  },
+];
+
+const review = [
+  {
+    icon: "lock",
+    title: "Access is set per app",
+    body: "Each app is open to named people, to groups, to everyone signed in, or to the public if an administrator allows it.",
+  },
+  {
+    icon: "shield-check",
+    title: "Dependencies are checked",
+    body: "Every build is checked against published advisories, and running apps are checked again. One inventory covers every app.",
+  },
+  {
+    icon: "file-check",
+    title: "Audit-ready reports",
+    body: "A NIST SP 800-171 control document as a PDF, and an audit report read live from the install and exported with a digest and a date.",
+  },
+  {
+    icon: "clipboard-list",
+    title: "Changes are recorded",
+    body: "Sign-ins, access changes and administrator actions go to an audit log.",
+  },
+];
+
+const title = "Toft — self-hosted app platform";
+const description =
+  "Hand-written or agent-built, live behind your sign-in. Toft builds Python, R, Node, Go and notebook projects and serves them on your own infrastructure.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.site} />
+    <link rel="canonical" href={Astro.site} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="/" aria-label="Toft home">
+          <img src="/favicon.svg" alt="" width="22" height="22" />
+          <span>Toft</span>
+        </a>
+        <nav class="header-nav">
+          <a href={DOCS}>Docs</a>
+          <a href="#get-started" class="hide-sm">Install</a>
+          <a class="button primary sm" href={PLAYGROUND}>Try the playground</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="container hero">
+        <div class="hero-grid rise">
+          <div>
+            <p class="eyebrow">Self-hosted app platform</p>
+            <h1>
+              Hand-written or agent-built.
+              <span class="quiet">Live behind your sign-in.</span>
+            </h1>
+          </div>
+          <div class="hero-side">
+            <p class="lede">
+              Every Git push redeploys. Or ship a working tree with the <code>toft</code> CLI, skills for your
+              coding agent included. Python, R, Node, Go and notebooks, on your own infrastructure.
+            </p>
+            <div class="actions">
+              <a class="button primary lg" href={PLAYGROUND}>
+                Try the playground <Icon name="arrow-right" />
+              </a>
+              <a class="button outline lg" href="#get-started">Install Toft</a>
+            </div>
+          </div>
+        </div>
+
+        <figure class="diagram card rise-late">
+          <figcaption class="sr-only">
+            A deploy in three steps: your code, the build, and an address behind your sign-in.
+          </figcaption>
+          <div class="step">
+            <div class="step-head"><span class="num">01</span><span class="step-title">Source</span></div>
+            <p class="mono-line"><Icon name="git-branch" /><span>github.com/acme/orders</span></p>
+            <p class="line"><Icon name="refresh-cw" />Redeploys on every push</p>
+            <p class="small muted">or from a working tree</p>
+            <p class="mono-line"><Icon name="terminal" /><span>toft deploy</span></p>
+          </div>
+          <div class="step ruled">
+            <span class="arrow" aria-hidden="true"><Icon name="arrow-right" /></span>
+            <div class="step-head"><span class="num">02</span><span class="step-title">Build</span></div>
+            <p class="line"><Icon name="check" />Framework detected</p>
+            <p class="line"><Icon name="check" />Dependencies checked</p>
+          </div>
+          <div class="step ruled">
+            <span class="arrow" aria-hidden="true"><Icon name="arrow-right" /></span>
+            <div class="step-head">
+              <span class="num">03</span><span class="step-title">Serve</span>
+              <span class="badge ok"><span class="dot"></span>Running</span>
+            </div>
+            <p class="mono-line"><Icon name="lock" /><span>apps.example.com/orders/</span></p>
+            <p class="line"><Icon name="shield-check" />Behind your sign-in</p>
+          </div>
+        </figure>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">01</p>
+            <h2>Languages and frameworks</h2>
+            <p>Toft reads the project and picks the build. You don’t write a Dockerfile or a config file.</p>
+          </div>
+          <div class="band-body">
+            <div class="stack-cols hide-sm">
+              <span>Language</span><span>What it builds</span><span class="right">Client library</span>
+            </div>
+            <ul class="rows">
+              {
+                languages.map((l) => (
+                  <li class="stack-row">
+                    <span class="row-label">{l.language}</span>
+                    <span class="right muted small sdk">{l.sdk ? "SDK" : "—"}</span>
+                    <div class="stack-what">
+                      {l.named.length > 0 && (
+                        <ul class="inline-list strong">
+                          {l.named.map((n) => <li>{n}</li>)}
+                        </ul>
+                      )}
+                      <p class="muted small">{l.generic}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="note">
+              If your project already builds to static HTML, as {builtOutput.join(", ")} do, tell Toft which folder the
+              output goes to and it serves the files.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">02</p>
+            <h2>Included with every app</h2>
+            <p>No extra services to install or pay for.</p>
+          </div>
+          <div class="band-body">
+            <ul class="cells card">
+              {
+                capabilities.map((c) => (
+                  <li>
+                    <Icon name={c.icon} class="cell-icon" />
+                    <h3>{c.title}</h3>
+                    <p>{c.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">03</p>
+            <h2>Integrations</h2>
+            <p>
+              An administrator sets up each connection once and chooses which apps can use it. Apps send through Toft
+              and never see the credential.
+            </p>
+          </div>
+          <div class="band-body">
+            <ul class="rows">
+              {
+                integrations.map((g) => (
+                  <li class="label-row">
+                    <span class="row-label">{g.label}</span>
+                    <ul class="inline-list strong">
+                      {g.names.map((n) => <li>{n}</li>)}
+                    </ul>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">04</p>
+            <h2>Where it runs</h2>
+            <p>
+              Toft is one binary in one image. It runs wherever containers do, with a Postgres database and your
+              identity provider.
+            </p>
+          </div>
+          <div class="band-body">
+            <ul class="rows">
+              {
+                deployShapes.map((r) => (
+                  <li class="label-row">
+                    <span class="row-label">{r.label}</span>
+                    <p class="muted small">{r.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">05</p>
+            <h2>For your security review</h2>
+            <p>What an administrator or auditor can check for themselves.</p>
+          </div>
+          <div class="band-body">
+            <ul class="cells card">
+              {
+                review.map((c) => (
+                  <li>
+                    <Icon name={c.icon} class="cell-icon" />
+                    <h3>{c.title}</h3>
+                    <p>{c.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" id="get-started">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">06</p>
+            <h2>Get started</h2>
+            <p>Try it on the playground first, or put it on a server of your own.</p>
+          </div>
+          <div class="band-body">
+            <ul class="rows">
+              <li class="label-row">
+                <span class="row-label">Playground</span>
+                <div class="stack-what">
+                  <p class="muted small">
+                    A shared Toft to try things on. Deploy an app, open it, share it. Don’t put anything private there.
+                  </p>
+                  <p><a class="link" href={PLAYGROUND}>trytoft.dev <Icon name="arrow-right" /></a></p>
+                </div>
+              </li>
+              <li class="label-row">
+                <span class="row-label">One server</span>
+                <div class="stack-what">
+                  <p class="muted small">
+                    Linux on x86_64 or arm64, 4 GB of RAM and 20 GB free. The script checks the machine first, offers
+                    to install Docker if it’s missing, and prints the administrator’s password once.
+                  </p>
+                  <pre class="cmd"><code>{INSTALL_CMD}</code></pre>
+                  <p><a class="link" href={INSTALL_REPO}>The one-box install <Icon name="arrow-right" /></a></p>
+                </div>
+              </li>
+              <li class="label-row">
+                <span class="row-label">Kubernetes</span>
+                <div class="stack-what">
+                  <p class="muted small">
+                    A Helm chart, with setups for Amazon EKS and ECS and Azure AKS in the administrator’s guide.
+                  </p>
+                  <p><a class="link" href={INSTALL_OPTIONS}>Install options <Icon name="arrow-right" /></a></p>
+                </div>
+              </li>
+              <li class="label-row">
+                <span class="row-label">The CLI</span>
+                <div class="stack-what">
+                  <p class="muted small">
+                    Linux and macOS; Windows has its own download. Then <code>toft login</code> with your install’s
+                    address, and <code>toft create</code> in your app’s folder.
+                  </p>
+                  <pre class="cmd"><code>{CLI_CMD}</code></pre>
+                  <p><a class="link" href={FIRST_APP}>Deploy your first app <Icon name="arrow-right" /></a></p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container close">
+          <div>
+            <h2 class="display">See it running.</h2>
+            <p class="lede">The playground is a real Toft. Deploy something and open it at its own address.</p>
+          </div>
+          <div class="actions">
+            <a class="button primary lg" href={PLAYGROUND}>Try the playground <Icon name="arrow-right" /></a>
+            <a class="button outline lg" href={DOCS}>Read the docs</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <span class="muted small">© 2026 Larchway Labs</span>
+        <nav class="footer-nav small">
+          <a href={DOCS}>Docs</a>
+          <a href={CLI_REPO}>CLI</a>
+          <a href={SDK_REPO}>SDKs</a>
+          <a href={GALLERY_REPO}>Gallery</a>
+          <a href={INSTALL_REPO}>Install</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
