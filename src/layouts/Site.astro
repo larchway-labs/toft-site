@@ -1,0 +1,70 @@
+---
+/**
+ * The frame every page shares: the head, the header and the footer. The links
+ * every page needs live here too, so a page imports them rather than retyping.
+ */
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "../styles/site.css";
+import { CONTACT, CLI_REPO, DOCS, GALLERY_REPO, INSTALL_REPO, PLAYGROUND, SDK_REPO } from "../links";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="/" aria-label="Toft home">
+          <img src="/favicon.svg" alt="" width="22" height="22" />
+          <span>Toft</span>
+        </a>
+        <nav class="header-nav">
+          <a href={DOCS}>Docs</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/#agents" class="hide-sm">For agents</a>
+          <a href="/#get-started" class="hide-sm">Install</a>
+          <a class="button primary sm" href={PLAYGROUND}>Try the playground</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <span class="muted small">© 2026 Larchway Labs</span>
+        <nav class="footer-nav small">
+          <a href={PLAYGROUND}>Playground: trytoft.dev</a>
+          <a href={DOCS}>Docs</a>
+          <a href="/pricing/">Pricing</a>
+          <a href={CLI_REPO}>CLI</a>
+          <a href={SDK_REPO}>SDKs</a>
+          <a href={GALLERY_REPO}>Gallery</a>
+          <a href={INSTALL_REPO}>Install</a>
+          <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

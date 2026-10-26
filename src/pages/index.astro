@@ -13,21 +13,14 @@
  * What this page adds is the way in for someone outside an organization: the
  * playground, and the install.
  */
-import "@fontsource-variable/geist";
-import "@fontsource-variable/geist-mono";
-import "../styles/site.css";
+import Site from "../layouts/Site.astro";
 import Icon from "../components/Icon.astro";
 import Mark from "../components/Mark.astro";
 import claims from "../data/claims.json";
+import { DOCS, INSTALL_REPO, PLAYGROUND } from "../links";
 
-const PLAYGROUND = "https://trytoft.dev";
-const DOCS = "https://docs.gettoft.com/latest/";
 const INSTALL_OPTIONS = `${DOCS}admin/start/install-options/`;
 const FIRST_APP = `${DOCS}user/start/first-app/`;
-const CLI_REPO = "https://github.com/larchway-labs/toft-cli";
-const INSTALL_REPO = "https://github.com/larchway-labs/toft-install";
-const SDK_REPO = "https://github.com/larchway-labs/toft-sdk";
-const GALLERY_REPO = "https://github.com/larchway-labs/toft-gallery";
 
 const INSTALL_CMD =
   "curl -fsSL https://raw.githubusercontent.com/larchway-labs/toft-install/main/install.sh | sh";
@@ -118,44 +111,14 @@ const description =
   "Hand-written or agent-built, live behind your sign-in. Toft builds Python, R, Node, Go and notebook projects and serves them on your own infrastructure.";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.site} />
-    <link rel="canonical" href={Astro.site} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="/" aria-label="Toft home">
-          <img src="/favicon.svg" alt="" width="22" height="22" />
-          <span>Toft</span>
-        </a>
-        <nav class="header-nav">
-          <a href={DOCS}>Docs</a>
-          <a href="#agents" class="hide-sm">For agents</a>
-          <a href="#get-started" class="hide-sm">Install</a>
-          <a class="button primary sm" href={PLAYGROUND}>Try the playground</a>
-        </nav>
-      </div>
-    </header>
-
-    <main>
+<Site title={title} description={description}>
       <section class="container hero">
         <div class="hero-grid rise">
           <div>
             <p class="eyebrow">Self-hosted app platform</p>
             <h1>
               Hand-written or agent-built.
-              <span class="quiet">Live behind your sign-in.</span>
+              {" "}<span class="quiet">Live behind your sign-in.</span>
             </h1>
           </div>
           <div class="hero-side">
@@ -443,20 +406,4 @@ toft logs                  <span class="c"># read what the app said</span></code
           </div>
         </div>
       </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-row">
-        <span class="muted small">© 2026 Larchway Labs</span>
-        <nav class="footer-nav small">
-          <a href={PLAYGROUND}>Playground: trytoft.dev</a>
-          <a href={DOCS}>Docs</a>
-          <a href={CLI_REPO}>CLI</a>
-          <a href={SDK_REPO}>SDKs</a>
-          <a href={GALLERY_REPO}>Gallery</a>
-          <a href={INSTALL_REPO}>Install</a>
-        </nav>
-      </div>
-    </footer>
-  </body>
-</html>
+</Site>

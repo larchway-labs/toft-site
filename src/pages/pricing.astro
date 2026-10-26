@@ -1,0 +1,186 @@
+---
+/**
+ * Pricing, while Toft is in beta: nothing is charged.
+ *
+ * The two plans are the platform's own tiers. "Without a key" is the demo tier
+ * (no license key, ten apps, no outbound request) and "Beta license" is a key
+ * on the trial tier, which unlocks everything a paid license does. What each
+ * row claims has to hold against the platform's `docs/dev-reference.md`
+ * § The tier and `docs/invariants.md` § The license.
+ */
+import Site from "../layouts/Site.astro";
+import Icon from "../components/Icon.astro";
+import { CONTACT, PLAYGROUND } from "../links";
+
+const BETA_KEY = `mailto:${CONTACT}?subject=${encodeURIComponent("Beta license key")}`;
+
+const plans = [
+  {
+    name: "Without a key",
+    price: "$0",
+    term: "always",
+    summary: "Install it and start deploying. Nothing to sign up for.",
+    rows: [
+      "Up to 10 apps",
+      "Deploys from Git or from a working tree",
+      "Scheduled and background jobs",
+      "The CLI, the SDKs and the agent skills",
+      "Access set per app, and an audit log",
+      "Never contacts us",
+    ],
+    action: { label: "Install Toft", href: "/#get-started", style: "outline" },
+  },
+  {
+    name: "Beta license",
+    price: "$0",
+    term: "during the beta",
+    summary: "Every feature, with no app limit. Ask us for a key.",
+    rows: [
+      "No limit on apps",
+      "Sign-in through your identity provider, and groups",
+      "App storage: file shares and S3 buckets",
+      "Integrations: chat, mail and the rest",
+      "Public apps",
+      "Dependency policy and trusted sources",
+      "Telemetry export",
+    ],
+    action: { label: "Ask for a beta key", href: BETA_KEY, style: "primary" },
+  },
+];
+
+const after = [
+  {
+    label: "Not per user",
+    body: "Toft isn’t priced per user, and no plan has a seat limit.",
+  },
+  {
+    label: "Apps keep running",
+    body: "A license controls what can be set up, never what runs. If a key lapses, every app keeps serving.",
+  },
+  {
+    label: "Notice first",
+    body: "Before the beta ends, prices will be published on this page, and everyone holding a beta key hears from us.",
+  },
+];
+
+const questions = [
+  {
+    label: "Getting a key",
+    body: `Write to ${CONTACT} with your name and your organization. The key goes in Admin → License on your install.`,
+  },
+  {
+    label: "What a key sends",
+    body: "An install with a key checks in with our license service. It sends a short list of counts, such as how many apps it runs, and never the name of an app or a person. An install without a key sends nothing.",
+  },
+  {
+    label: "The playground",
+    body: "trytoft.dev is free to use. It’s shared, so don’t put anything private there.",
+  },
+];
+
+const title = "Pricing — Toft";
+const description =
+  "Toft is free while it’s in beta. Install it with no key for up to 10 apps, or ask for a beta license for every feature.";
+---
+
+<Site title={title} description={description}>
+  <section class="container hero">
+    <div class="hero-grid rise">
+      <div>
+        <p class="eyebrow">Pricing</p>
+        <h1>
+          Free while Toft is in beta.
+          {" "}<span class="quiet">Every feature, on your own servers.</span>
+        </h1>
+      </div>
+      <div class="hero-side">
+        <p class="lede">
+          No credit card and no per-user price. Install it today, and ask us for a beta license when you want the
+          parts that need one.
+        </p>
+      </div>
+    </div>
+
+    <ul class="plans rise-late">
+      {
+        plans.map((p) => (
+          <li class={`card plan${p.action.style === "primary" ? " featured" : ""}`}>
+            <h2 class="plan-name">{p.name}</h2>
+            <p class="plan-price">
+              {p.price} <span class="muted small">{p.term}</span>
+            </p>
+            <p class="muted small">{p.summary}</p>
+            <ul class="plan-rows">
+              {p.rows.map((r) => (
+                <li>
+                  <Icon name="check" />
+                  {r}
+                </li>
+              ))}
+            </ul>
+            <a class={`button ${p.action.style} lg`} href={p.action.href}>
+              {p.action.label} <Icon name="arrow-right" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="band">
+    <div class="container band-grid">
+      <div class="band-head">
+        <p class="num">01</p>
+        <h2>After the beta</h2>
+        <p>What won’t change when prices arrive.</p>
+      </div>
+      <div class="band-body">
+        <ul class="rows">
+          {
+            after.map((r) => (
+              <li class="label-row">
+                <span class="row-label">{r.label}</span>
+                <p class="muted small">{r.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container band-grid">
+      <div class="band-head">
+        <p class="num">02</p>
+        <h2>Questions</h2>
+        <p>Anything else, write to us.</p>
+      </div>
+      <div class="band-body">
+        <ul class="rows">
+          {
+            questions.map((r) => (
+              <li class="label-row">
+                <span class="row-label">{r.label}</span>
+                <p class="muted small">{r.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container close">
+      <div>
+        <h2 class="display">Try it first.</h2>
+        <p class="lede">The playground is a real Toft, free to use. Or write to {CONTACT}.</p>
+      </div>
+      <div class="actions">
+        <a class="button primary lg" href={PLAYGROUND}>Try the playground <Icon name="arrow-right" /></a>
+        <a class="button outline lg" href={`mailto:${CONTACT}`}>Email us</a>
+      </div>
+    </div>
+  </section>
+</Site>
