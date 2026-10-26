@@ -6,7 +6,7 @@
 import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import "../styles/site.css";
-import { CONTACT, CLI_REPO, DOCS, GALLERY_REPO, INSTALL_REPO, PLAYGROUND, SDK_REPO } from "../links";
+import { CLI_REPO, DOCS, GALLERY_REPO, INSTALL_REPO, PLAYGROUND, SDK_REPO } from "../links";
 
 interface Props {
   title: string;
@@ -62,7 +62,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           <a href={SDK_REPO}>SDKs</a>
           <a href={GALLERY_REPO}>Gallery</a>
           <a href={INSTALL_REPO}>Install</a>
-          <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
         </nav>
       </div>
     </footer>

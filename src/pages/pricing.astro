@@ -10,9 +10,7 @@
  */
 import Site from "../layouts/Site.astro";
 import Icon from "../components/Icon.astro";
-import { CONTACT, PLAYGROUND } from "../links";
-
-const BETA_KEY = `mailto:${CONTACT}?subject=${encodeURIComponent("Beta license key")}`;
+import { PLAYGROUND } from "../links";
 
 const plans = [
   {
@@ -28,13 +26,13 @@ const plans = [
       "Access set per app, and an audit log",
       "Never contacts us",
     ],
-    action: { label: "Install Toft", href: "/#get-started", style: "outline" },
+    action: { label: "Install Toft", href: "/#get-started" },
   },
   {
     name: "Beta license",
     price: "$0",
     term: "during the beta",
-    summary: "Every feature, with no app limit. Ask us for a key.",
+    summary: "Every feature, with no app limit. Keys open soon.",
     rows: [
       "No limit on apps",
       "Sign-in through your identity provider, and groups",
@@ -44,7 +42,7 @@ const plans = [
       "Dependency policy and trusted sources",
       "Telemetry export",
     ],
-    action: { label: "Ask for a beta key", href: BETA_KEY, style: "primary" },
+    featured: true,
   },
 ];
 
@@ -66,7 +64,7 @@ const after = [
 const questions = [
   {
     label: "Getting a key",
-    body: `Write to ${CONTACT} with your name and your organization. The key goes in Admin → License on your install.`,
+    body: "Beta keys aren’t open yet. When they are, a key goes in Admin → License on your install, and nothing has to be reinstalled.",
   },
   {
     label: "What a key sends",
@@ -95,8 +93,7 @@ const description =
       </div>
       <div class="hero-side">
         <p class="lede">
-          No credit card and no per-user price. Install it today, and ask us for a beta license when you want the
-          parts that need one.
+          No credit card and no per-user price. Install it today, with no key and nothing to sign up for.
         </p>
       </div>
     </div>
@@ -104,7 +101,7 @@ const description =
     <ul class="plans rise-late">
       {
         plans.map((p) => (
-          <li class={`card plan${p.action.style === "primary" ? " featured" : ""}`}>
+          <li class={`card plan${p.featured ? " featured" : ""}`}>
             <h2 class="plan-name">{p.name}</h2>
             <p class="plan-price">
               {p.price} <span class="muted small">{p.term}</span>
@@ -118,9 +115,11 @@ const description =
                 </li>
               ))}
             </ul>
-            <a class={`button ${p.action.style} lg`} href={p.action.href}>
-              {p.action.label} <Icon name="arrow-right" />
-            </a>
+            {p.action && (
+              <a class="button outline lg" href={p.action.href}>
+                {p.action.label} <Icon name="arrow-right" />
+              </a>
+            )}
           </li>
         ))
       }
@@ -154,7 +153,7 @@ const description =
       <div class="band-head">
         <p class="num">02</p>
         <h2>Questions</h2>
-        <p>Anything else, write to us.</p>
+        <p>What people ask first.</p>
       </div>
       <div class="band-body">
         <ul class="rows">
@@ -175,11 +174,11 @@ const description =
     <div class="container close">
       <div>
         <h2 class="display">Try it first.</h2>
-        <p class="lede">The playground is a real Toft, free to use. Or write to {CONTACT}.</p>
+        <p class="lede">The playground is a real Toft, free to use.</p>
       </div>
       <div class="actions">
         <a class="button primary lg" href={PLAYGROUND}>Try the playground <Icon name="arrow-right" /></a>
-        <a class="button outline lg" href={`mailto:${CONTACT}`}>Email us</a>
+        <a class="button outline lg" href="/#get-started">Install Toft</a>
       </div>
     </div>
   </section>
