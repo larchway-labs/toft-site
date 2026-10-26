@@ -1,0 +1,15 @@
+---
+/**
+ * A framework's own mark, vendored by the platform from Simple Icons and
+ * delivered in claims.json. Decorative: the name is always text beside it.
+ */
+interface Props {
+  mark: { title: string; color: string; path: string };
+  size?: "sm" | "lg";
+}
+const { mark, size = "sm" } = Astro.props;
+---
+
+<svg class:list={["mark", size]} viewBox="0 0 24 24" aria-hidden="true" style={`color:${mark.color}`}>
+  <path d={mark.path} fill="currentColor"></path>
+</svg>

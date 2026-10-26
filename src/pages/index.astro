@@ -6,7 +6,9 @@
  * (`web/src/pages/landing.tsx` in the platform repo) so a visitor moving from
  * here to the playground sees one product. The rule carries over too: every
  * claim here has to hold up against the platform's `docs/invariants.md`, and a
- * framework is named only where the build detector names it.
+ * framework is named only where the build detector names it. Those lists are
+ * not typed here: they arrive as src/data/claims.json from the platform's own
+ * checked copy (scripts/sync-claims.sh).
  *
  * What this page adds is the way in for someone outside an organization: the
  * playground, and the install.
@@ -15,6 +17,8 @@ import "@fontsource-variable/geist";
 import "@fontsource-variable/geist-mono";
 import "../styles/site.css";
 import Icon from "../components/Icon.astro";
+import Mark from "../components/Mark.astro";
+import claims from "../data/claims.json";
 
 const PLAYGROUND = "https://trytoft.dev";
 const DOCS = "https://larchway-labs.github.io/toft-docs/latest/";
@@ -30,15 +34,7 @@ const INSTALL_CMD =
 const CLI_CMD =
   "curl -fsSL https://raw.githubusercontent.com/larchway-labs/toft-cli/main/install.sh | sh";
 
-const languages = [
-  { language: "Python", named: ["Flask", "FastAPI", "Streamlit"], generic: "Any other Python app", sdk: true },
-  { language: "Node", named: ["Next.js"], generic: "Any other Node app", sdk: true },
-  { language: "Go", named: [], generic: "Any Go service", sdk: true },
-  { language: "R", named: ["Shiny", "Plumber", "R Markdown", "Quarto"], generic: "Other R projects aren’t built", sdk: true },
-  { language: "Notebooks", named: ["marimo"], generic: "Jupyter and Quarto documents, re-run when you deploy", sdk: false },
-  { language: "Static", named: [], generic: "A folder of HTML, served as it is", sdk: false },
-];
-const builtOutput = ["Vite", "Astro", "SvelteKit", "Hugo", "Eleventy", "Create React App"];
+const { languages, builtOutput, integrationGroups } = claims;
 
 const capabilities = [
   {
@@ -63,18 +59,16 @@ const capabilities = [
   },
 ];
 
-const integrations = [
-  { label: "Messages", names: ["Slack", "Microsoft Teams", "Microsoft Teams (bot)", "Google Chat", "Discord", "Email"] },
-  { label: "Files", names: ["SharePoint", "OneDrive", "Google Drive"] },
-  { label: "Alerts and webhooks", names: ["PagerDuty", "Signed webhook"] },
-];
-
 const deployShapes = [
   {
     label: "Runs on",
     body: "Any container runtime: Docker Compose on a single server, Kubernetes through a Helm chart, Amazon ECS and EKS, and Azure AKS. On Kubernetes an app can run in its own pod, with network policy around it.",
   },
   { label: "App storage", body: "EFS, Azure Files or any S3-compatible bucket." },
+  {
+    label: "Offline",
+    body: "An install needs no internet, no vendor service and no third-party account. Anything that reaches out is an optional capability an administrator turns on.",
+  },
   {
     label: "Sign-in",
     body: "Any OpenID Connect provider, including Okta, Microsoft Entra ID, Auth0, Keycloak, Ping and OneLogin.",
@@ -102,6 +96,56 @@ const review = [
     title: "Changes are recorded",
     body: "Sign-ins, access changes and administrator actions go to an audit log.",
   },
+];
+
+const agentPoints = [
+  {
+    label: "Skills included",
+    body: "toft-cli covers the deploy loop and toft-sdk covers writing the app. `toft skill` prints the copy written for your version, for Claude Code, Codex, Cursor or any agent that reads the Agent Skills format.",
+  },
+  {
+    label: "No browser needed",
+    body: "An agent signs in with a personal API key or a deploy key that an administrator scopes. A person approves a device once in the browser.",
+  },
+  {
+    label: "Readable results",
+    body: "Every command can answer in JSON with a documented exit code, and a refused deploy says what to fix.",
+  },
+];
+
+const examples = [
+  { name: "Request Desk", lang: "Python", body: "A request-and-approval desk where who may do what comes from the identity Toft supplies." },
+  { name: "Stockroom", lang: "Go", body: "An inventory register that sends its own report as a PDF, to Slack or by email, on demand or on a schedule." },
+  { name: "Next.js Dashboard", lang: "Node", body: "Stat tiles, a range switcher and a line chart, with no chart library." },
+  { name: "Stats API", lang: "R", body: "R’s base statistics behind five HTTP routes, with a console on the front page that calls them." },
+  { name: "Runway", lang: "marimo", body: "A reactive twenty-four month plan: nine sliders and no hidden state." },
+  { name: "MCP Server", lang: "Python", body: "A Model Context Protocol server an assistant can connect to, hosted like any other app." },
+];
+
+const comparisons = [
+  {
+    label: "Posit Connect",
+    body: "The same model, where every app has its own address and its own access list, extended to Node and Go alongside Python and R.",
+  },
+  {
+    label: "Low-code builders",
+    body: "Apps stay source code in your repository, written in the languages your team already uses. Nothing is rebuilt inside Toft.",
+  },
+  {
+    label: "Public hosting",
+    body: "It runs on your machines, one organization per install, and every app is behind your sign-in unless an administrator opens it.",
+  },
+  {
+    label: "Kubernetes by hand",
+    body: "No Dockerfile, YAML or chart per app. An administrator can still open a shell or kubectl and recognize what is running.",
+  },
+];
+
+const notThis = [
+  "Not CI: a deploy runs code that is already correct, with no pipelines or gates.",
+  "Not a low-code builder: nothing is authored inside Toft.",
+  "Not public multi-tenant hosting: one organization per install.",
+  "No horizontal scaling: each app runs as one replica, which keeps session-based frameworks working unchanged.",
 ];
 
 const title = "Toft — self-hosted app platform";
@@ -132,6 +176,7 @@ const description =
         </a>
         <nav class="header-nav">
           <a href={DOCS}>Docs</a>
+          <a href="#agents" class="hide-sm">For agents</a>
           <a href="#get-started" class="hide-sm">Install</a>
           <a class="button primary sm" href={PLAYGROUND}>Try the playground</a>
         </nav>
@@ -206,15 +251,23 @@ const description =
               {
                 languages.map((l) => (
                   <li class="stack-row">
-                    <span class="row-label">{l.language}</span>
+                    <span class="row-label with-mark">
+                      {l.mark && <Mark mark={l.mark} size="lg" />}
+                      {l.language}
+                    </span>
                     <span class="right muted small sdk">{l.sdk ? "SDK" : "—"}</span>
                     <div class="stack-what">
                       {l.named.length > 0 && (
                         <ul class="inline-list strong">
-                          {l.named.map((n) => <li>{n}</li>)}
+                          {l.named.map((n) => (
+                            <li class="with-mark">
+                              {n.mark && <Mark mark={n.mark} />}
+                              {n.label}
+                            </li>
+                          ))}
                         </ul>
                       )}
-                      <p class="muted small">{l.generic}</p>
+                      <p class="muted small">{l.generic ?? `Other ${l.language} projects aren’t built`}</p>
                     </div>
                   </li>
                 ))
@@ -228,10 +281,43 @@ const description =
         </div>
       </section>
 
-      <section class="band">
+      <section class="band" id="agents">
         <div class="container band-grid">
           <div class="band-head">
             <p class="num">02</p>
+            <h2>Built for coding agents</h2>
+            <p>
+              The build runs on the install, so an agent needs only your source and the <code>toft</code> binary. No
+              language toolchain on the machine it works on.
+            </p>
+          </div>
+          <div class="band-body">
+            <pre class="cmd terminal"><code><span class="c"># teach your agent once</span>
+toft skill toft-cli &gt; ~/.claude/skills/toft-cli/SKILL.md
+toft skill toft-sdk &gt; ~/.claude/skills/toft-sdk/SKILL.md
+
+<span class="c"># then the loop it runs on its own</span>
+toft create --yes --link   <span class="c"># claim an address, deploy, write toft.toml</span>
+toft deploy                <span class="c"># ship the working tree again</span>
+toft logs                  <span class="c"># read what the app said</span></code></pre>
+            <ul class="rows spaced">
+              {
+                agentPoints.map((r) => (
+                  <li class="label-row">
+                    <span class="row-label">{r.label}</span>
+                    <p class="muted small" set:html={r.body.replace(/`([^`]+)`/g, "<code>$1</code>")} />
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">03</p>
             <h2>Included with every app</h2>
             <p>No extra services to install or pay for.</p>
           </div>
@@ -254,7 +340,7 @@ const description =
       <section class="band">
         <div class="container band-grid">
           <div class="band-head">
-            <p class="num">03</p>
+            <p class="num">04</p>
             <h2>Integrations</h2>
             <p>
               An administrator sets up each connection once and chooses which apps can use it. Apps send through Toft
@@ -264,7 +350,7 @@ const description =
           <div class="band-body">
             <ul class="rows">
               {
-                integrations.map((g) => (
+                integrationGroups.map((g) => (
                   <li class="label-row">
                     <span class="row-label">{g.label}</span>
                     <ul class="inline-list strong">
@@ -281,7 +367,7 @@ const description =
       <section class="band">
         <div class="container band-grid">
           <div class="band-head">
-            <p class="num">04</p>
+            <p class="num">05</p>
             <h2>Where it runs</h2>
             <p>
               Toft is one binary in one image. It runs wherever containers do, with a Postgres database and your
@@ -306,7 +392,7 @@ const description =
       <section class="band">
         <div class="container band-grid">
           <div class="band-head">
-            <p class="num">05</p>
+            <p class="num">06</p>
             <h2>For your security review</h2>
             <p>What an administrator or auditor can check for themselves.</p>
           </div>
@@ -326,10 +412,60 @@ const description =
         </div>
       </section>
 
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">07</p>
+            <h2>Examples</h2>
+            <p>Working apps in every language, each one deployable as it is. Install one from the gallery inside Toft.</p>
+          </div>
+          <div class="band-body">
+            <ul class="cells card three">
+              {
+                examples.map((e) => (
+                  <li>
+                    <span class="lang">{e.lang}</span>
+                    <h3>{e.name}</h3>
+                    <p>{e.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="note"><a class="link" href={GALLERY_REPO}>All examples in the gallery <Icon name="arrow-right" /></a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="container band-grid">
+          <div class="band-head">
+            <p class="num">08</p>
+            <h2>How it compares</h2>
+            <p>Where Toft sits next to the tools teams usually reach for.</p>
+          </div>
+          <div class="band-body">
+            <ul class="rows">
+              {
+                comparisons.map((r) => (
+                  <li class="label-row">
+                    <span class="row-label">{r.label}</span>
+                    <p class="muted small">{r.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+            <h3 class="sub">What it isn’t</h3>
+            <ul class="plain-list">
+              {notThis.map((n) => <li>{n}</li>)}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section class="band" id="get-started">
         <div class="container band-grid">
           <div class="band-head">
-            <p class="num">06</p>
+            <p class="num">09</p>
             <h2>Get started</h2>
             <p>Try it on the playground first, or put it on a server of your own.</p>
           </div>
