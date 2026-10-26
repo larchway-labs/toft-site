@@ -113,41 +113,6 @@ const agentPoints = [
   },
 ];
 
-const examples = [
-  { name: "Request Desk", lang: "Python", body: "A request-and-approval desk where who may do what comes from the identity Toft supplies." },
-  { name: "Stockroom", lang: "Go", body: "An inventory register that sends its own report as a PDF, to Slack or by email, on demand or on a schedule." },
-  { name: "Next.js Dashboard", lang: "Node", body: "Stat tiles, a range switcher and a line chart, with no chart library." },
-  { name: "Stats API", lang: "R", body: "R’s base statistics behind five HTTP routes, with a console on the front page that calls them." },
-  { name: "Runway", lang: "marimo", body: "A reactive twenty-four month plan: nine sliders and no hidden state." },
-  { name: "MCP Server", lang: "Python", body: "A Model Context Protocol server an assistant can connect to, hosted like any other app." },
-];
-
-const comparisons = [
-  {
-    label: "Posit Connect",
-    body: "The same model, where every app has its own address and its own access list, extended to Node and Go alongside Python and R.",
-  },
-  {
-    label: "Low-code builders",
-    body: "Apps stay source code in your repository, written in the languages your team already uses. Nothing is rebuilt inside Toft.",
-  },
-  {
-    label: "Public hosting",
-    body: "It runs on your machines, one organization per install, and every app is behind your sign-in unless an administrator opens it.",
-  },
-  {
-    label: "Kubernetes by hand",
-    body: "No Dockerfile, YAML or chart per app. An administrator can still open a shell or kubectl and recognize what is running.",
-  },
-];
-
-const notThis = [
-  "Not CI: a deploy runs code that is already correct, with no pipelines or gates.",
-  "Not a low-code builder: nothing is authored inside Toft.",
-  "Not public multi-tenant hosting: one organization per install.",
-  "No horizontal scaling: each app runs as one replica, which keeps session-based frameworks working unchanged.",
-];
-
 const title = "Toft — self-hosted app platform";
 const description =
   "Hand-written or agent-built, live behind your sign-in. Toft builds Python, R, Node, Go and notebook projects and serves them on your own infrastructure.";
@@ -412,60 +377,10 @@ toft logs                  <span class="c"># read what the app said</span></code
         </div>
       </section>
 
-      <section class="band">
-        <div class="container band-grid">
-          <div class="band-head">
-            <p class="num">07</p>
-            <h2>Examples</h2>
-            <p>Working apps in every language, each one deployable as it is. Install one from the gallery inside Toft.</p>
-          </div>
-          <div class="band-body">
-            <ul class="cells card three">
-              {
-                examples.map((e) => (
-                  <li>
-                    <span class="lang">{e.lang}</span>
-                    <h3>{e.name}</h3>
-                    <p>{e.body}</p>
-                  </li>
-                ))
-              }
-            </ul>
-            <p class="note"><a class="link" href={GALLERY_REPO}>All examples in the gallery <Icon name="arrow-right" /></a></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="band">
-        <div class="container band-grid">
-          <div class="band-head">
-            <p class="num">08</p>
-            <h2>How it compares</h2>
-            <p>Where Toft sits next to the tools teams usually reach for.</p>
-          </div>
-          <div class="band-body">
-            <ul class="rows">
-              {
-                comparisons.map((r) => (
-                  <li class="label-row">
-                    <span class="row-label">{r.label}</span>
-                    <p class="muted small">{r.body}</p>
-                  </li>
-                ))
-              }
-            </ul>
-            <h3 class="sub">What it isn’t</h3>
-            <ul class="plain-list">
-              {notThis.map((n) => <li>{n}</li>)}
-            </ul>
-          </div>
-        </div>
-      </section>
-
       <section class="band" id="get-started">
         <div class="container band-grid">
           <div class="band-head">
-            <p class="num">09</p>
+            <p class="num">07</p>
             <h2>Get started</h2>
             <p>Try it on the playground first, or put it on a server of your own.</p>
           </div>
