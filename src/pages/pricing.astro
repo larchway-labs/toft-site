@@ -1,84 +1,13 @@
 ---
 /**
- * Pricing, while Toft is in beta: nothing is charged.
- *
- * The two plans are the platform's own tiers. "Without a key" is the demo tier
- * (no license key, ten apps, no outbound request) and "Beta license" is a key
- * on the trial tier, which unlocks everything a paid license does. What each
- * row claims has to hold against the platform's `docs/dev-reference.md`
- * § The tier and `docs/invariants.md` § The license.
+ * Pricing, while Toft is in beta: it is free, and the page says only that.
  */
 import Site from "../layouts/Site.astro";
 import Icon from "../components/Icon.astro";
 import { PLAYGROUND } from "../links";
 
-const plans = [
-  {
-    name: "Without a key",
-    price: "$0",
-    term: "always",
-    summary: "Install it and start deploying. Nothing to sign up for.",
-    rows: [
-      "Up to 10 apps",
-      "Deploys from Git or from a working tree",
-      "Scheduled and background jobs",
-      "The CLI, the SDKs and the agent skills",
-      "Access set per app, and an audit log",
-      "Never contacts us",
-    ],
-    action: { label: "Install Toft", href: "/#get-started" },
-  },
-  {
-    name: "Beta license",
-    price: "$0",
-    term: "during the beta",
-    summary: "Every feature, with no app limit. Keys open soon.",
-    rows: [
-      "No limit on apps",
-      "Sign-in through your identity provider, and groups",
-      "App storage: file shares and S3 buckets",
-      "Integrations: chat, mail and the rest",
-      "Public apps",
-      "Dependency policy and trusted sources",
-      "Telemetry export",
-    ],
-    featured: true,
-  },
-];
-
-const after = [
-  {
-    label: "Not per user",
-    body: "Toft isn’t priced per user, and no plan has a seat limit.",
-  },
-  {
-    label: "Apps keep running",
-    body: "A license controls what can be set up, never what runs. If a key lapses, every app keeps serving.",
-  },
-  {
-    label: "Notice first",
-    body: "Before the beta ends, prices will be published on this page, and everyone holding a beta key hears from us.",
-  },
-];
-
-const questions = [
-  {
-    label: "Getting a key",
-    body: "Beta keys aren’t open yet. When they are, a key goes in Admin → License on your install, and nothing has to be reinstalled.",
-  },
-  {
-    label: "What a key sends",
-    body: "An install with a key checks in with our license service. It sends a short list of counts, such as how many apps it runs, and never the name of an app or a person. An install without a key sends nothing.",
-  },
-  {
-    label: "The playground",
-    body: "trytoft.dev is free to use. It’s shared, so don’t put anything private there.",
-  },
-];
-
 const title = "Pricing — Toft";
-const description =
-  "Toft is free while it’s in beta. Install it with no key for up to 10 apps, or ask for a beta license for every feature.";
+const description = "Toft is free while it’s in beta.";
 ---
 
 <Site title={title} description={description}>
@@ -86,86 +15,12 @@ const description =
     <div class="hero-grid rise">
       <div>
         <p class="eyebrow">Pricing</p>
-        <h1>
-          Free while Toft is in beta.
-          {" "}<span class="quiet">Every feature, on your own servers.</span>
-        </h1>
+        <h1>Free while Toft is in beta.</h1>
       </div>
       <div class="hero-side">
         <p class="lede">
-          No credit card and no per-user price. Install it today, with no key and nothing to sign up for.
+          Install it on your own servers and use it at no cost while it’s in beta. Nothing to sign up for.
         </p>
-      </div>
-    </div>
-
-    <ul class="plans rise-late">
-      {
-        plans.map((p) => (
-          <li class={`card plan${p.featured ? " featured" : ""}`}>
-            <h2 class="plan-name">{p.name}</h2>
-            <p class="plan-price">
-              {p.price} <span class="muted small">{p.term}</span>
-            </p>
-            <p class="muted small">{p.summary}</p>
-            <ul class="plan-rows">
-              {p.rows.map((r) => (
-                <li>
-                  <Icon name="check" />
-                  {r}
-                </li>
-              ))}
-            </ul>
-            {p.action && (
-              <a class="button outline lg" href={p.action.href}>
-                {p.action.label} <Icon name="arrow-right" />
-              </a>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section class="band">
-    <div class="container band-grid">
-      <div class="band-head">
-        <p class="num">01</p>
-        <h2>After the beta</h2>
-        <p>What won’t change when prices arrive.</p>
-      </div>
-      <div class="band-body">
-        <ul class="rows">
-          {
-            after.map((r) => (
-              <li class="label-row">
-                <span class="row-label">{r.label}</span>
-                <p class="muted small">{r.body}</p>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="band">
-    <div class="container band-grid">
-      <div class="band-head">
-        <p class="num">02</p>
-        <h2>Questions</h2>
-        <p>What people ask first.</p>
-      </div>
-      <div class="band-body">
-        <ul class="rows">
-          {
-            questions.map((r) => (
-              <li class="label-row">
-                <span class="row-label">{r.label}</span>
-                <p class="muted small">{r.body}</p>
-              </li>
-            ))
-          }
-        </ul>
       </div>
     </div>
   </section>
