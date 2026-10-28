@@ -673,3 +673,14 @@ h1 {
 .rows.spaced {
   margin-top: 1.5rem;
 }
+/* A link set inside prose, which would otherwise read as plain text. */
+.lede a,
+a.row-label {
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.2em;
+}
+.lede a:hover,
+a.row-label:hover {
+  text-decoration-color: currentColor;
+}

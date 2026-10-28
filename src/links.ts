@@ -5,3 +5,4 @@ export const CLI_REPO = "https://github.com/larchway-labs/toft-cli";
 export const INSTALL_REPO = "https://github.com/larchway-labs/toft-install";
 export const SDK_REPO = "https://github.com/larchway-labs/toft-sdk";
 export const GALLERY_REPO = "https://github.com/larchway-labs/toft-gallery";
+export const CONTACT = "hello@gettoft.com";

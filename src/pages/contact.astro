@@ -1,0 +1,86 @@
+---
+/**
+ * Contact: one address, hello@gettoft.com, and what to put in a message so it
+ * can be answered in one reply.
+ */
+import Site from "../layouts/Site.astro";
+import Icon from "../components/Icon.astro";
+import { CONTACT, DOCS, PLAYGROUND } from "../links";
+
+const title = "Contact — Toft";
+const description = `Questions about Toft go to ${CONTACT}.`;
+
+const mailto = (subject: string) => `mailto:${CONTACT}?subject=${encodeURIComponent(subject)}`;
+
+const topics = [
+  {
+    label: "A question about Toft",
+    body: "Whether it fits what your team builds, how it runs on your servers, or anything the docs don’t answer.",
+    subject: "A question about Toft",
+  },
+  {
+    label: "Something isn’t working",
+    body: "Say which version you run, what you did, and what happened instead. A log line helps.",
+    subject: "Something isn’t working",
+  },
+  {
+    label: "A security issue",
+    body: "Write to us before you tell anyone else, and we’ll reply to say we have it.",
+    subject: "Security report",
+  },
+];
+---
+
+<Site title={title} description={description}>
+  <section class="container hero">
+    <div class="hero-grid rise">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1>Write to us.</h1>
+      </div>
+      <div class="hero-side">
+        <p class="lede">
+          One address for everything: <a href={`mailto:${CONTACT}`}>{CONTACT}</a>. A person reads it and answers.
+        </p>
+        <div class="actions">
+          <a class="button primary lg" href={`mailto:${CONTACT}`}>Email {CONTACT} <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container band-grid">
+      <div class="band-head">
+        <p class="num">01</p>
+        <h2>What to write about</h2>
+        <p>Each link opens a message with the subject filled in.</p>
+      </div>
+      <div class="band-body">
+        <ul class="rows spaced">
+          {
+            topics.map((t) => (
+              <li class="label-row">
+                <a class="row-label" href={mailto(t.subject)}>{t.label}</a>
+                <p class="muted small">{t.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="container close">
+      <div>
+        <h2 class="display">Or look first.</h2>
+        <p class="lede">The docs cover installing and running Toft, and the playground is a real Toft, free to use.</p>
+      </div>
+      <div class="actions">
+        <a class="button primary lg" href={PLAYGROUND}>Try the playground <Icon name="arrow-right" /></a>
+        <a class="button outline lg" href={DOCS}>Read the docs</a>
+      </div>
+    </div>
+  </section>
+</Site>
