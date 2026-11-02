@@ -42,8 +42,8 @@ const capabilities = [
   },
   {
     icon: "hard-drive",
-    title: "Storage",
-    body: "An administrator attaches a file share or an S3 bucket. The app sees a folder and never handles the credentials.",
+    title: "Storage hub",
+    body: "Your buckets and file shares, reached by name. Apps use the SDK; pipelines and scripts outside Toft use toft store. No cloud keys in any of them.",
   },
   {
     icon: "terminal",
@@ -57,7 +57,7 @@ const deployShapes = [
     label: "Runs on",
     body: "Any container runtime: Docker Compose on a single server, Kubernetes through a Helm chart, Amazon ECS and EKS, and Azure AKS. On Kubernetes an app can run in its own pod, with network policy around it.",
   },
-  { label: "App storage", body: "EFS, Azure Files or any S3-compatible bucket." },
+  { label: "Storage hub", body: "EFS, Azure Files or any S3-compatible bucket." },
   {
     label: "Offline",
     body: "An install needs no internet, no vendor service and no third-party account. Anything that reaches out is an optional capability an administrator turns on.",
